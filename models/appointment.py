@@ -36,14 +36,21 @@ class Appointment:
        conn.commit()
        cursor.close()
 
-    def cancel_appointment(self):
-        
-        for appointment in Appointment.appointments_list:
+    def cancel_appointment(conn, val):
+        cursor = conn.cursor()
+        sql = """ UPDATE appointments SET appointment_status = %s WHERE id = %s """
+        cursor.execute(sql,val)
+        conn.commit()
+        cursor.close()
+
+
+        pass
+        #for appointment in Appointment.appointments_list:
             
-            if appointment["Id"] == self._id:
-                if appointment["Status"] == True:
-                    self._status = False
-                    appointment["Status"] = self._status
-                    print(f'A consulta de id {self._id} com o doutor {self._veterinarian} foi cancelada com sucesso!')
-                else:
-                    print('Consulta já consta como cancelada!\n')
+            #if appointment["Id"] == self._id:
+                #if appointment["Status"] == True:
+                    #self._status = False
+                    #appointment["Status"] = self._status
+                    #print(f'A consulta de id {self._id} com o doutor {self._veterinarian} foi cancelada com sucesso!')
+                #else:
+                    #print('Consulta já consta como cancelada!\n')

@@ -7,7 +7,7 @@ def appointment_menu():
         print('\n***MENU - AGENDAMENTOS:***: \n')
         print('\n***ESCOLHA O NÚMERO DA OPÇÃO***\n')
 
-        appointment_option = int(input('\n 1 - Cadastro \n 2 - Reagendar \n'))
+        appointment_option = int(input('\n 1 - Cadastrar \n 2 - Reagendar \n 3 - Cancelar \n'))
         ##animal, veterinarian, date, time, description
         match(appointment_option):
             case 1:
@@ -42,6 +42,16 @@ def appointment_menu():
                 conn = create_connection()
                 Appointment.reschedule_appointment(conn,val)
                 conn.close()
+            case 3:
+                print('***CANCELAMENTO DE CONSULTA***')
+                appointment_id = int(input('\nQual o id do agendamento?\n'))
 
+                new_status = 'canceled'
+                val = (new_status, appointment_id)
+
+                conn = create_connection()
+                Appointment.cancel_appointment(conn, val)
+                conn.close()
+                print('Consulta cancelada com sucesso!')
 
                 
