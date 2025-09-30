@@ -1,4 +1,4 @@
-from utils.save_appointments_to_json import save_apointments_to_json
+from utils.db import create_connection
 
 class Appointment:
 
@@ -11,47 +11,30 @@ class Appointment:
         self._time = time
         self._description = description
         self._id = None
-        self._status = False
+        self._status = 'scheduled'
 
-    def schedule_appointment(self):
-        """
-        Verifica se a lista tem conteudo cadastrado, se sim,
-        cria o id do novo agendamento somando o id anterior com 1
-        se não. o id é 1
-        """
-        if Appointment.appointments_list:
-            last_appointment = Appointment.appointments_list[-1]
-            last_id = last_appointment["Id"]
-            new_id = last_id + 1
-        else:
-            new_id = 1
-        self._id = new_id
-        self._status = True
-        "salva as informações num dicionario"
-        new_appointment = {
-            "Id" : self._id,
-            "Animal" : self._animal,
-            "Veterinarian" : self._veterinarian,
-            "Date" : self._date,
-            "Time" : self._time,
-            "Description" : self._description,
-            "Status" : self._status
-        }
-        Appointment.appointments_list.append(new_appointment)
-        save_apointments_to_json()
+    def schedule_appointment(self,conn):
+        cursor = conn.cursor()
+        sql = """INSERT INTO appointments (id_animal, id_veterinarian, appointment_date, appointment_time,
+         appointment_description, appointment_status) VALUES (%s, %s, %s, %s, %s, %s)"""
+        val = (
+        self._animal,
+        self._veterinarian,
+        self._date,
+        self._time,
+        self._description,
+        self._status
+        )
+        cursor.execute(sql,val)
+        conn.commit()
+        cursor.close()
 
-    def reschedule_appointment(self, new_date, new_time):
-        """
-        Utiliza um loop para percorrer a lista e compara se o id do dicionario é igual o id da consulta que queremos reagendar.
-        Se for igual, salvamos a nova data e novo horário nas suas respectivas chaves no dicionário e alteramos o valor dos atributos
-        no objeto da atual consulta.
-        """
-        for appointment in Appointment.appointments_list:
-            if appointment["Id"] == self._id:
-                appointment["Date"] = new_date
-                appointment["Time"] = new_time
-                self._date = new_date
-                self._time = new_time
+    def reschedule_appointment(conn,val):
+       cursor = conn.cursor()
+       sql = """UPDATE appointments SET appointment_date = %s, appointment_time = %s WHERE id = %s;"""
+       cursor.execute(sql,val)
+       conn.commit()
+       cursor.close()
 
     def cancel_appointment(self):
         

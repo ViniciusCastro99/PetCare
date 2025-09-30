@@ -1,14 +1,17 @@
 from models.animal import Animal
 from utils.db import create_connection
+import os
 
 def animal_menu():
-    print('\nAnimais: \n')
+    os.system('cls')
+    print('\n***MENU - ANIMAIS \n')
     print('\n***ESCOLHA O NÚMERO DA OPÇÃO***\n')
 
     animal_option = int(input('\n 1 - Cadastrar animal \n 2 - Editar dados do animal \n '))
 
     match(animal_option):
         case 1:
+            os.system('cls')
             animal_owner = input('\nQual o CPF do dono do animal?\n')
             animal_name = input('\nQual o nome do animal: \n')
             animal_specie = input('\nQual a espécie do animal? \n')
@@ -23,6 +26,7 @@ def animal_menu():
             conn.close()
 
         case 2:
+            os.system('cls')
             print('\n***EDIÇÃO DE DADOS DO ANIMAL***\n')
             
             conn = create_connection()

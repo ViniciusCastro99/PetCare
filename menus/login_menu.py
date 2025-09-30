@@ -11,33 +11,36 @@ def login_menu():
         login_menu()
 
     print('*** Bem-vindo(a) ao PetCare, seu sistema de gestão veterinário! ***\n')
-    option = int(input('Escolha:\n 1 - Login \n 2 - Cadastro de Usuário '))
+    option = int(input('Escolha:\n 1 - Login \n 2 - Cadastro de Usuário\n '))
 
     if option == 1:
         username = input("Digite seu usuário: ")
         password = input("Digite sua senha: ")
 
-        if login(username, password):
+        success, role = login(username, password)
+
+        if success:
             os.system('cls')
-            initial_menu()
+            initial_menu(role)
         else:
             print("Acesso negado!")
             time.sleep(3)
             reload()
     elif option == 2:
-        username = input('Escolha um nome de usuário: ')
-        password = input('Digite sua senha de preferência: ')
-        password2 = input('Repita sua senha: ')
+        username = input('\nEscolha um nome de usuário:\n ')
+        role = input('\nQual nível de privilégio do usuário?\n admin \n receptionist\n veterinarian?\n')
+        password = input('\nDigite sua senha de preferência:\n ')
+        password2 = input('\nRepita sua senha:\n ')
             
         if password == password2:
-            create_user(username,password)
-            print('Usuário criado com sucesso!')
+            create_user(username,password, role)
+            print('\nUsuário criado com sucesso!')
             reload()
         else:
-            print('Senhas não combinam!')
+            print('\nSenhas não combinam!')
             time.sleep(3)
             reload()
     else:
-        print('Opção inválida')
+        print('\nOpção inválida')
         time.sleep(3)
         reload()
